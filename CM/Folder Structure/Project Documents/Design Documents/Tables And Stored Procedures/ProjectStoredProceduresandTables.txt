@@ -1,0 +1,268 @@
+CREATE TABLE [group2cargo].[Cities] (
+    [CityId]    INT          IDENTITY (2000, 1) NOT NULL,
+    [CityName]  VARCHAR (20) NOT NULL,
+    [StateName] VARCHAR (20) NOT NULL,
+    PRIMARY KEY CLUSTERED ([CityId] ASC)
+);
+
+----------------------------------------------------------------
+
+CREATE TABLE [group2cargo].[CustomerDetails] (
+    [CustId]      INT           IDENTITY (3000, 1) NOT NULL,
+    [CustName]    VARCHAR (20)  NOT NULL,
+    [CustAddress] NVARCHAR (30) NULL,
+    [CustPhone]   VARCHAR (20)  NOT NULL,
+    [CustCity]    VARCHAR (15)  NULL,
+    [CustEmail]   NVARCHAR (30) NULL,
+    PRIMARY KEY CLUSTERED ([CustId] ASC)
+);
+
+-----------------------------------------------------------------
+
+CREATE TABLE [group2cargo].[EmployeeLogin] (
+    [EmpId]   INT          IDENTITY (1000, 1) NOT NULL,
+    [EmpPwd]  VARCHAR (20) NOT NULL,
+    [EmpName] VARCHAR (20) NOT NULL,
+    PRIMARY KEY CLUSTERED ([EmpId] ASC)
+);
+
+------------------------------------------------------------------
+
+CREATE TABLE [group2cargo].[OrderDetails] (
+    [OrderId]            INT          IDENTITY (5000, 1) NOT NULL,
+    [OrderCustId]        INT          NULL,
+    [OrderProdId]        INT          NULL,
+    [Quantity]           INT          NULL,
+    [OrderWeight]        INT          NULL,
+    [TotalAmount]        MONEY        NULL,
+    [OrderSourceId]      INT          NULL,
+    [OrderDestinationId] INT          NULL,
+    [DestinationAddress] VARCHAR (40) NULL,
+    [FlightNo]           VARCHAR (30) NULL,
+    [StatusInfo]         VARCHAR (30) NULL,
+    [OrderDate]          DATE         NULL,
+    [DeliveryDate]       DATE         NULL,
+    PRIMARY KEY CLUSTERED ([OrderId] ASC),
+    FOREIGN KEY ([OrderProdId]) REFERENCES [group2cargo].[ProductDetails] ([ProdId]),
+    FOREIGN KEY ([OrderCustId]) REFERENCES [group2cargo].[CustomerDetails] ([CustId]),
+    FOREIGN KEY ([OrderSourceId]) REFERENCES [group2cargo].[Cities] ([CityId]),
+    FOREIGN KEY ([OrderDestinationId]) REFERENCES [group2cargo].[Cities] ([CityId])
+);
+
+---------------------------------------------------------------------
+
+CREATE TABLE [group2cargo].[PlacesPrice] (
+    [PlacePrid]     INT   NOT NULL,
+    [SourceId]      INT   NULL,
+    [DestinationId] INT   NULL,
+    [PlacePrice]    MONEY NULL,
+    PRIMARY KEY CLUSTERED ([PlacePrid] ASC),
+    FOREIGN KEY ([SourceId]) REFERENCES [group2cargo].[Cities] ([CityId]),
+    FOREIGN KEY ([DestinationId]) REFERENCES [group2cargo].[Cities] ([CityId])
+);
+
+----------------------------------------------------------------------
+
+CREATE TABLE [group2cargo].[ProductDetails] (
+    [ProdId]   INT          IDENTITY (4000, 1) NOT NULL,
+    [ProdName] VARCHAR (30) NULL,
+    [ProdType] VARCHAR (30) NULL,
+    PRIMARY KEY CLUSTERED ([ProdId] ASC)
+);
+
+
+
+
+
+UPDATE CUSTOMER DETAILS
+
+
+CREATE PROCEDURE [group2cargo].[USP_Update_CustomerDetails]
+    
+		@CustName varchar(20),
+      @CustAddress nvarchar(30),
+        @CustPhone varchar(20),
+        @CustCity varchar(15),
+        @CustEmail varchar(30),
+		@CustId int
+AS
+	update group2cargo.CustomerDetails
+	set 
+	CustName= @CustName,
+      CustAddress= @CustAddress,
+        CustPhone= @CustPhone,
+       CustCity= @CustCity, 
+        CustEmail=@CustEmail
+		where CustId=@CustId 
+RETURN 0
+
+
+
+INSERT CUSTOMER DETAILS
+
+
+
+CREATE PROCEDURE [group2cargo].[USP_Insert_CustomerDetails]
+	@CustName varchar(20),
+      @CustAddress nvarchar(30),
+        @CustPhone varchar(20),
+        @CustCity varchar(15),
+        @CustEmail varchar(30)
+	
+AS
+insert into group2cargo.CustomerDetails(CustName,CustAddress,CustPhone,CustCity,CustEmail)values(@CustName,@CustAddress,@CustPhone,@CustCity,@CustEmail)
+RETURN 0
+
+
+DISPLAY
+
+CREATE PROCEDURE [group2cargo].[USP_Display_CustomerDetails]
+AS
+	SELECT*from group2cargo.CustomerDetails
+RETURN 0
+
+
+
+
+
+EMPLOYEELOGIN
+
+insert
+
+CREATE PROCEDURE [group2cargo].[USP_Insert_EmployeeLogin]
+	@EmpPwd varchar(20),
+      @EmpName varchar(20)
+	
+AS
+insert into group2cargo.EmployeeLogin(EmpPwd,EmpName)values(@EmpPwd,@EmpName)
+RETURN 0
+
+
+PRODUCT DETAILS
+
+Insert
+
+CREATE PROCEDURE [group2cargo].[USP_Insert_ProductDetails]
+	@ProdName varchar(30),
+      @ProdType varchar(30)
+	
+AS
+insert into group2cargo.ProductDetails(ProdName,ProdType)values(@ProdName,@ProdType)
+RETURN 0
+
+
+update
+
+CREATE PROCEDURE [group2cargo].[USP_Update_ProductDetails]
+    
+	@ProdName varchar(30),
+    @ProdType varchar(30),
+	@ProdId int
+       
+AS
+	update group2cargo.ProductDetails
+	set 
+	ProdName= @ProdName,
+	ProdType=@ProdType
+	where ProdId=@ProdId
+	
+		
+RETURN 0
+
+
+
+Display Productdetails
+
+CREATE PROCEDURE [group2cargo].[USP_Display_ProductDetails]
+AS
+	SELECT*from group2cargo.ProductDetails
+RETURN 0
+
+
+
+PLACEPRICE
+
+Insert
+
+CREATE PROCEDURE [group2cargo].[USP_Insert_PlacesPrice]
+@PlacePrice money
+AS
+insert into group2cargo.PlacesPrice(PlacePrice)values(@PlacePrice)
+RETURN 0
+
+
+
+
+Orderdetails
+
+insert
+
+CREATE PROCEDURE [group2cargo].[USP_Insert_OrderDetails]
+@Quantity int,
+@OrderWeight int,
+@TotalAmount money,
+@DestinationAddress varchar(40),
+@FlightNo varchar(30),
+@StatusInfo varchar(30),
+@OrderDate date,
+@DeliveryDate date
+
+AS
+insert into group2cargo.OrderDetails(Quantity,OrderWeight,TotalAmount,DestinationAddress,FlightNo,StatusInfo,OrderDate,DeliveryDate)values(@Quantity,@OrderWeight,@TotalAmount,@DestinationAddress,@FlightNo,@StatusInfo,@OrderDate,@DeliveryDate)
+RETURN 0
+
+
+
+
+update
+
+
+CREATE PROCEDURE [group2cargo].[USP_Update_OrderDetails]
+@OrderCustId int,
+@OrderProdId int,
+@Quantity int,
+@OrderWeight int,
+@TotalAmount money,
+@OrderSourceId int,
+@OrderDestinationId int,
+@DestinationAddress varchar(40),
+@FlightNo varchar(30),
+@StatusInfo varchar(30),
+@OrderDate date,
+@DeliveryDate date,
+@OrderId int
+
+
+       
+AS
+	update group2cargo.OrderDetails
+	set 
+	OrderCustId=@OrderCustId,
+    OrderProdId=@OrderProdId, 
+	Quantity=@Quantity,
+	OrderWeight =@OrderWeight,
+	TotalAmount=@TotalAmount,
+    OrderSourceId=@OrderSourceId,
+    OrderDestinationId=@OrderDestinationId,
+    DestinationAddress=@DestinationAddress, 
+    FlightNo=@FlightNo, 
+    StatusInfo=@StatusInfo, 
+    OrderDate=@OrderDate, 
+    DeliveryDate=@DeliveryDate 
+where OrderId =@OrderId
+
+	
+		
+RETURN 0
+
+
+display
+CREATE PROCEDURE [group2cargo].[USP_Display_OrderDetails]
+AS
+	SELECT*from group2cargo.OrderDetails
+RETURN 0
+
+
+
+
+
